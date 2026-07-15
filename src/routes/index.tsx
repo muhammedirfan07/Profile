@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Cursor } from "@/components/Cursor";
 import { Nav, Footer } from "@/components/Nav";
+import { Loader } from "@/components/Loader";
+import { RoleRotator } from "@/components/RoleRotator";
 import { projects, skills, uiWork } from "@/lib/projects";
 
 export const Route = createFileRoute("/")({
@@ -12,6 +14,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const root = useRef<HTMLDivElement>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -74,10 +77,11 @@ function Index() {
       });
     }, root);
     return () => ctx.revert();
-  }, []);
+  }, [loaded]);
 
   return (
     <div ref={root} className="bg-white text-black">
+      {!loaded && <Loader onDone={() => setLoaded(true)} />}
       <Cursor />
       <Nav />
       <Hero />
@@ -93,20 +97,16 @@ function Index() {
 }
 
 function Hero() {
-  const name = "MUHAMMED";
-  const name2 = "IRFAN.";
   return (
     <section className="relative min-h-screen overflow-hidden pt-32 pb-16">
       <div className="mx-auto max-w-[1600px] px-6">
-        <p className="font-hand text-3xl md:text-4xl">Hello, I'm —</p>
+        <p className="font-hand text-3xl md:text-4xl">Hi 👋 , I'm Irfan —</p>
         <h1 className="mt-4 select-none font-sans text-[18vw] font-bold leading-[0.85] tracking-tighter md:text-[16vw]">
-          <span className="block overflow-hidden">
-            {name.split("").map((c, i) => (
-              <span key={i} className="hero-char inline-block">{c}</span>
-            ))}
+          <span className="hero-role block overflow-hidden">
+            <RoleRotator />
           </span>
           <span className="relative block overflow-hidden">
-            {name2.split("").map((c, i) => (
+            {"DEVELOPER".split("").map((c, i) => (
               <span key={i} className="hero-char inline-block">{c}</span>
             ))}
             <svg className="hero-scribble pointer-events-none absolute -right-4 top-1/2 hidden h-40 w-40 -translate-y-1/2 md:block" viewBox="0 0 100 100" fill="none">

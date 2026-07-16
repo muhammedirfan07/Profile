@@ -6,7 +6,7 @@ import { Cursor } from "@/components/Cursor";
 import { Nav, Footer } from "@/components/Nav";
 import { Loader } from "@/components/Loader";
 import { RoleRotator } from "@/components/RoleRotator";
-import { projects, skills, uiWork } from "@/lib/projects";
+import { projects, skills, uiWork, journey } from "@/lib/projects";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -75,9 +75,42 @@ function Index() {
           scrollTrigger: { trigger: el, start: "top 85%" },
         });
       });
+
+      // Tech stack tile stagger
+      gsap.utils.toArray<HTMLElement>(".stack-tile").forEach((el, i) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 40,
+          scale: 0.9,
+          duration: 0.6,
+          delay: i * 0.04,
+          ease: "back.out(1.6)",
+          scrollTrigger: { trigger: el, start: "top 90%" },
+        });
+      });
+
+      // Journey scroll pop — reversible in both directions
+      gsap.utils.toArray<HTMLElement>(".journey-item").forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 100,
+          scale: 0.85,
+          rotate: -2,
+          duration: 0.8,
+          ease: "back.out(1.6)",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            end: "top 40%",
+            toggleActions: "play reverse play reverse",
+          },
+        });
+      });
     }, root);
     return () => ctx.revert();
   }, [loaded]);
+
+  
 
   return (
     <div ref={root} className="bg-white text-black">
@@ -89,7 +122,8 @@ function Index() {
       <About />
       <Work />
       <UI />
-      <SkillsSection />
+      <TechStack />
+      <Journey />
       <Contact />
       <Footer />
     </div>
@@ -101,41 +135,121 @@ function Hero() {
     <section className="relative min-h-screen overflow-hidden pt-32 pb-16">
       <div className="mx-auto max-w-[1600px] px-6">
         <p className="font-hand text-3xl md:text-4xl">Hi 👋 , I'm Irfan —</p>
-        <h1 className="mt-4 select-none font-sans text-[18vw] font-bold leading-[0.85] tracking-tighter md:text-[16vw]">
+ 
+        <h1 className="mt-2 select-none font-sans text-[15vw] font-bold leading-[0.85] tracking-tighter md:text-[13vw]">
           <span className="hero-role block overflow-hidden">
             <RoleRotator />
           </span>
+ 
           <span className="relative block overflow-hidden">
             {"DEVELOPER".split("").map((c, i) => (
-              <span key={i} className="hero-char inline-block">{c}</span>
+              <span key={i} className="hero-char hero-outline inline-block">
+                {c}
+              </span>
             ))}
-            <svg className="hero-scribble pointer-events-none absolute -right-4 top-1/2 hidden h-40 w-40 -translate-y-1/2 md:block" viewBox="0 0 100 100" fill="none">
-              <path d="M20 50 Q50 10 80 50 T20 50" stroke="black" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-              <circle cx="50" cy="50" r="30" stroke="black" strokeWidth="2.5" fill="none" strokeDasharray="4 6"/>
-            </svg>
+           
           </span>
         </h1>
-        <div className="hero-sub mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+ 
+        <div className="hero-sub mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="md:col-span-2">
             <p className="max-w-xl text-xl leading-snug md:text-2xl">
               A <span className="sketch-underline">full-stack developer</span> crafting real-time,
               human-scale web products with React, Node.js and a lot of stubborn attention to detail.
             </p>
           </div>
-          <div className="flex flex-col items-start justify-end gap-3 text-sm uppercase tracking-widest md:items-end">
-            <span>↓ Scroll</span>
+          <div className="flex flex-col items-start justify-end gap-2 text-sm uppercase tracking-widest md:items-end">
+            <span><span className="scroll-indicator">↓</span> Scroll</span>
             <span>Based in India</span>
             <span>Open to work — 2026</span>
           </div>
         </div>
+ 
+        <div className="mt-6 flex flex-wrap gap-3">
+          <HoverFillButton
+            href="https://github.com/your-username"
+            label="GitHub"
+            icon={<GithubIcon />}
+            external
+          />
+          <HoverFillButton
+            href="https://linkedin.com/in/your-username"
+            label="LinkedIn"
+            icon={<LinkedinIcon />}
+            external
+          />
+          <HoverFillButton
+            href="/resume.pdf"
+            label="Resume"
+            icon={<ResumeIcon />}
+            download="Muhammed-Irfan-Resume.pdf"
+          />
+        </div>
       </div>
-      {/* sketch decoration */}
-      <svg className="pointer-events-none absolute left-6 top-24 h-16 w-16 -rotate-12" viewBox="0 0 100 100" fill="none">
-        <path d="M10 90 L50 10 L90 90 Z" stroke="black" strokeWidth="2.5" strokeLinejoin="round" strokeDasharray="3 5"/>
+ 
+      <svg className="triangle-accent pointer-events-none absolute left-6 top-24 h-16 w-16 -rotate-12" viewBox="0 0 100 100" fill="none">
+        <path d="M10 90 L50 10 L90 90 Z" stroke="black" strokeWidth="2.5" strokeLinejoin="round" strokeDasharray="3 5" />
       </svg>
     </section>
   );
 }
+
+function HoverFillButton({
+  href,
+  label,
+  icon,
+  external,
+  download,
+}: {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  external?: boolean;
+  download?: string;
+}) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...(download ? { download } : {})}
+      data-cursor-hover
+      data-cursor-text={download ? "download" : "open"}
+      className="hover-fill-btn flex items-center gap-2 border-2 border-black px-5 py-2.5 text-sm font-semibold uppercase tracking-widest"
+    >
+      {icon}
+      {label}
+    </a>
+  );
+}
+ 
+function GithubIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.73 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.82 1.18 3.08 0 4.41-2.7 5.38-5.27 5.67.42.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z" />
+    </svg>
+  );
+}
+ 
+function LinkedinIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.28 2.38 4.28 5.48v6.26ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z" />
+    </svg>
+  );
+}
+ 
+function ResumeIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+      <path d="M12 18v-6" />
+      <path d="M9 15l3 3 3-3" />
+    </svg>
+  );
+}
+ 
+export { Hero };
 
 function Marquee() {
   const items = ["React", "Node.js", "MongoDB", "Socket.io", "TypeScript", "Next.js", "Tailwind", "Express", "MySQL", "Figma"];
@@ -157,7 +271,7 @@ function Marquee() {
 
 function About() {
   return (
-    <section className="border-b-2 border-black">
+    <section id="about" className="border-b-2 border-black">
       <div className="mx-auto grid max-w-[1600px] gap-10 px-6 py-24 md:grid-cols-12">
         <div className="md:col-span-4">
           <p className="pop font-hand text-3xl">— about</p>
@@ -211,6 +325,8 @@ function ProjectCard({ project, index }: { project: typeof projects[number]; ind
       params={{ slug: project.slug }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      data-cursor-hover
+      data-cursor-text="view"
       className="project-card group relative block border-2 border-black bg-white p-6 md:p-10"
       style={{ transform: hover ? "translate(-6px,-6px)" : "translate(0,0)", boxShadow: hover ? "12px 12px 0 #000" : "0 0 0 #000", transition: "transform .3s ease, box-shadow .3s ease" }}
     >
@@ -251,8 +367,8 @@ function UI() {
               <h3 className="font-hand text-5xl">{w.title}</h3>
               <p className="mt-4 text-base leading-relaxed">{w.desc}</p>
               <div className="mt-6 flex gap-4 text-sm uppercase tracking-widest">
-                <span>GitHub ↗</span>
-                <span>Demo ↗</span>
+                <span data-cursor-hover data-cursor-text="open">GitHub ↗</span>
+                <span data-cursor-hover data-cursor-text="open">Demo ↗</span>
               </div>
             </div>
           ))}
@@ -262,27 +378,100 @@ function UI() {
   );
 }
 
-function SkillsSection() {
+function TechStack() {
+  const cats = Object.keys(skills) as (keyof typeof skills)[];
+  const [active, setActive] = useState<keyof typeof skills>(cats[0]);
+  const items = skills[active];
+
   return (
-    <section id="skills" className="border-b-2 border-black">
+    <section id="skills" className="border-b-2 border-black bg-black text-white">
       <div className="mx-auto max-w-[1600px] px-6 py-24">
         <p className="font-hand text-3xl">— toolbox</p>
-        <h2 className="section-title text-6xl font-bold leading-none md:text-8xl">Skills & Stack.</h2>
-        <div className="mt-16 grid gap-10 md:grid-cols-4">
-          {Object.entries(skills).map(([group, items]) => (
-            <div key={group} className="pop">
-              <p className="font-hand text-3xl">{group}</p>
-              <div className="mt-4 h-px w-full bg-black" />
-              <ul className="mt-4 space-y-2 text-lg">
-                {items.map((s) => (
-                  <li key={s} className="flex items-center gap-2">
-                    <span className="inline-block h-2 w-2 rotate-45 bg-black" />
-                    {s}
-                  </li>
-                ))}
-              </ul>
+        <h2 className="section-title text-6xl font-bold leading-none md:text-8xl">
+          Tech <span className="font-hand italic">stack</span>
+        </h2>
+
+        <div className="mt-12 flex flex-wrap gap-3">
+          {cats.map((c) => (
+            <button
+              key={c}
+              onClick={() => setActive(c)}
+              data-cursor-hover
+              data-cursor-text="select"
+              className={`font-hand text-xl px-5 py-2 border-2 border-white transition-colors md:text-2xl ${
+                active === c ? "bg-white text-black" : "hover:bg-white/10"
+              }`}
+              style={{ borderRadius: "255px 15px 225px 15px/15px 225px 15px 255px" }}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+
+        <div key={active} className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
+          {items.map((t, i) => (
+            <div
+              key={t}
+              className="stack-tile relative flex h-32 flex-col justify-between border-2 border-white p-6 md:h-36"
+              style={{
+                borderRadius:
+                  i % 2 === 0
+                    ? "255px 15px 225px 15px/15px 225px 15px 255px"
+                    : "15px 225px 15px 255px/225px 15px 255px 15px",
+              }}
+            >
+              <span className="font-hand text-lg opacity-70">
+                #{String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="text-2xl font-bold uppercase italic leading-none md:text-3xl">
+                {t}
+              </span>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Journey() {
+  return (
+    <section id="journey" className="border-b-2 border-black">
+      <div className="mx-auto max-w-[1600px] px-6 py-24">
+        <p className="font-hand text-3xl">— journey</p>
+        <h2 className="section-title text-6xl font-bold leading-none md:text-8xl">
+          Timeline.
+        </h2>
+
+        <div className="relative mt-16 pl-8 md:pl-16">
+          <div className="absolute left-2 md:left-6 top-0 bottom-0 w-px border-l-2 border-dashed border-black" />
+          <div className="space-y-20">
+            {journey.map((j) => (
+              <div key={j.title} className="journey-item relative">
+                <div className="absolute -left-8 md:-left-16 top-2 h-4 w-4 rounded-full border-2 border-black bg-white" />
+                <p className="font-hand text-2xl">{j.period}</p>
+                <h3 className="mt-2 text-4xl md:text-6xl font-bold leading-none">
+                  {j.title}
+                </h3>
+                <p className="mt-3 text-sm uppercase tracking-widest opacity-70">
+                  {j.org}
+                </p>
+                <p className="mt-5 max-w-2xl text-lg leading-relaxed">
+                  {j.description}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {j.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="sketch-border px-3 py-1 text-xs uppercase tracking-widest"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -317,7 +506,12 @@ function Contact() {
             <Field label="Your name" name="name" />
             <Field label="Email" name="email" type="email" />
             <Field label="What's on your mind?" name="msg" textarea />
-            <button type="submit" className="sketch-border bg-black px-8 py-4 text-lg uppercase tracking-widest text-white transition-transform hover:-translate-y-1">
+            <button
+              type="submit"
+              data-cursor-hover
+              data-cursor-text="send"
+              className="sketch-border bg-black px-8 py-4 text-lg uppercase tracking-widest text-white transition-transform hover:-translate-y-1"
+            >
               {sent ? "Sent ✔ — I'll reply soon" : "Send it →"}
             </button>
           </form>

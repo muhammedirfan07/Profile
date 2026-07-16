@@ -85,3 +85,28 @@ export const skills = {
   Database: ["MongoDB", "MySQL", "Firebase"],
   Tools: ["Git", "GitHub", "Figma", "Postman", "Vercel"],
 };
+
+export const journey: {
+  period: string;
+  title: string;
+  org: string;
+  description: string;
+  tags: string[];
+}[] = [
+  {
+    period: "Aug 2024 — Present",
+    title: "MERN Stack Developer Intern",
+    org: "Luminar Technolab",
+    description:
+      "Working on full-stack web applications using the MERN stack. Responsible for developing responsive UIs, implementing RESTful APIs, and integrating with MongoDB databases.",
+    tags: ["React.js", "Node.js", "MongoDB", "Express"],
+  },
+  {
+    period: "2021 — 2024",
+    title: "Bachelor of Computer Science",
+    org: "Kannur University",
+    description:
+      "Graduated with honors. Specialized in web development and software engineering.",
+    tags: ["CS", "Web Dev"],
+  },
+];

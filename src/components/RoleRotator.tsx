@@ -1,18 +1,22 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-
-const ROLES = ["FULLSTACK", "FRONTEND", "BACKEND", "REALTIME"];
-
+ 
+const ROLES = ["FULLSTACK", "FRONTEND", "BACKEND"];
+ 
 export function RoleRotator() {
   const wrap = useRef<HTMLSpanElement>(null);
-
+ 
   useEffect(() => {
     if (!wrap.current) return;
     const items = wrap.current.querySelectorAll<HTMLElement>(".role-item");
     gsap.set(items, { yPercent: 100, opacity: 0 });
-    gsap.set(items[0], { yPercent: 0, opacity: 1 });
+    gsap.fromTo(
+      items[0],
+      { yPercent: 100, opacity: 0 },
+      { yPercent: 0, opacity: 1, duration: 0.9, ease: "expo.out", delay: 0.2 }
+    );
 
-    const tl = gsap.timeline({ repeat: -1, delay: 1.8 });
+    const tl = gsap.timeline({ repeat: -1, delay: 2.6 });
     items.forEach((_, i) => {
       const next = items[(i + 1) % items.length];
       const cur = items[i];
@@ -29,7 +33,7 @@ export function RoleRotator() {
       tl.kill();
     };
   }, []);
-
+ 
   return (
     <span
       ref={wrap}
@@ -37,14 +41,10 @@ export function RoleRotator() {
       style={{ minWidth: "8ch" }}
     >
       {ROLES.map((r) => (
-        <span
-          key={r}
-          className="role-item absolute left-0 top-0 whitespace-nowrap"
-        >
+        <span key={r} className="role-item absolute left-0 top-0 whitespace-nowrap">
           {r}
         </span>
       ))}
-      {/* invisible sizer keeps line height */}
       <span className="invisible whitespace-nowrap">FULLSTACK</span>
     </span>
   );

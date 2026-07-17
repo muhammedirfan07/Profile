@@ -8,17 +8,27 @@ import { Loader } from "@/components/Loader";
 import { RoleRotator } from "@/components/RoleRotator";
 import { projects, skills, uiWork, journey } from "@/lib/projects";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
   const root = useRef<HTMLDivElement>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(() =>
+    typeof window !== "undefined" ? sessionStorage.getItem("homeLoaded") === "true" : false
+  );
+
+  const handleLoaded = () => {
+    setLoaded(true);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("homeLoaded", "true");
+    }
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       // Hero letters
       gsap.from(".hero-char", {
@@ -110,11 +120,9 @@ function Index() {
     return () => ctx.revert();
   }, [loaded]);
 
-  
-
   return (
     <div ref={root} className="bg-white text-black">
-      {!loaded && <Loader onDone={() => setLoaded(true)} />}
+      {!loaded && <Loader onDone={handleLoaded} />}
       <Cursor />
       <Nav />
       <Hero />
@@ -135,22 +143,21 @@ function Hero() {
     <section className="relative min-h-screen overflow-hidden pt-32 pb-16">
       <div className="mx-auto max-w-[1600px] px-6">
         <p className="font-hand text-3xl md:text-4xl">Hi 👋 , I'm Irfan —</p>
- 
+
         <h1 className="mt-2 select-none font-sans text-[15vw] font-bold leading-[0.85] tracking-tighter md:text-[13vw]">
           <span className="hero-role block overflow-hidden">
             <RoleRotator />
           </span>
- 
+
           <span className="relative block overflow-hidden">
             {"DEVELOPER".split("").map((c, i) => (
               <span key={i} className="hero-char hero-outline inline-block">
                 {c}
               </span>
             ))}
-           
           </span>
         </h1>
- 
+
         <div className="hero-sub mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="md:col-span-2">
             <p className="max-w-xl text-xl leading-snug md:text-2xl">
@@ -164,29 +171,29 @@ function Hero() {
             <span>Open to work — 2026</span>
           </div>
         </div>
- 
+
         <div className="mt-6 flex flex-wrap gap-3">
           <HoverFillButton
-            href="https://github.com/your-username"
+            href="https://github.com/muhammedirfan07"
             label="GitHub"
             icon={<GithubIcon />}
             external
           />
           <HoverFillButton
-            href="https://linkedin.com/in/your-username"
+            href="https://www.linkedin.com/in/muhammed-irfan-k007/"
             label="LinkedIn"
             icon={<LinkedinIcon />}
             external
           />
           <HoverFillButton
-            href="/resume.pdf"
+            href="/Muhammed_Irfan_K__CV.pdf"
             label="Resume"
             icon={<ResumeIcon />}
             download="Muhammed-Irfan-Resume.pdf"
           />
         </div>
       </div>
- 
+
       <svg className="triangle-accent pointer-events-none absolute left-6 top-24 h-16 w-16 -rotate-12" viewBox="0 0 100 100" fill="none">
         <path d="M10 90 L50 10 L90 90 Z" stroke="black" strokeWidth="2.5" strokeLinejoin="round" strokeDasharray="3 5" />
       </svg>
@@ -221,7 +228,7 @@ function HoverFillButton({
     </a>
   );
 }
- 
+
 function GithubIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -229,7 +236,7 @@ function GithubIcon() {
     </svg>
   );
 }
- 
+
 function LinkedinIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -237,7 +244,7 @@ function LinkedinIcon() {
     </svg>
   );
 }
- 
+
 function ResumeIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -248,7 +255,7 @@ function ResumeIcon() {
     </svg>
   );
 }
- 
+
 export { Hero };
 
 function Marquee() {
@@ -257,6 +264,8 @@ function Marquee() {
 
   useEffect(() => {
     if (typeof window === "undefined" || !trackRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger);
 
     const tween = gsap.to(trackRef.current, {
       xPercent: -50,
@@ -322,7 +331,7 @@ function About() {
                 I design and ship full-stack applications end to end — from schema and sockets to the last button hover. My favourite work sits at the intersection of real-time systems and interfaces that feel personal, not templated.
               </p>
             </div>
-            
+
           </div>
           <div className="flex flex-wrap gap-4 pt-2">
             <span className="sketch-border px-4 py-2 text-sm uppercase tracking-widest">Available for freelance</span>
@@ -420,37 +429,11 @@ function UI() {
 
         <div
           ref={trackRef}
-          className="mt-6 flex snap-x snap-mandatory gap-8 overflow-x-auto pb-4"
+          className="mt-6 flex snap-x snap-mandatory gap-8 overflow-x-auto  pb-4 ps-4 pt-4"
           style={{ scrollbarWidth: "none" }}
         >
           {uiWork.map((w) => (
-            <div
-              key={w.title}
-              className="ui-card pop w-full flex-shrink-0 snap-start border-2 border-black p-8"
-            >
-              <h3 className="font-hand text-5xl">{w.title}</h3>
-              <p className="mt-4 text-base leading-relaxed">{w.desc}</p>
-              <div className="mt-6 flex gap-4 text-sm uppercase tracking-widest">
-                
-                 <a href={w.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-hover
-                  data-cursor-text="open"
-                >
-                  GitHub ↗
-                </a>
-                
-                 <a href={w.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-hover
-                  data-cursor-text="open"
-                >
-                  Demo ↗
-                </a>
-              </div>
-            </div>
+            <UICard key={w.title} work={w} />
           ))}
         </div>
 
@@ -479,6 +462,45 @@ function UI() {
   );
 }
 
+function UICard({ work }: { work: typeof uiWork[number] }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      className="ui-card pop w-full flex-shrink-0 snap-start border-2 border-black p-8"
+      style={{
+        transform: hover ? "translate(-3px,-3px)" : "translate(0,0)",
+        boxShadow: hover ? "12px 12px 0 #000" : "0 0 0 #000",
+        transition: "transform .3s ease, box-shadow .3s ease",
+      }}
+    >
+      <h3 className="font-hand text-5xl">{work.title}</h3>
+      <p className="mt-4 text-base leading-relaxed">{work.desc}</p>
+      <div className="mt-6 flex gap-4 text-sm uppercase tracking-widest">
+        
+          <a href={work.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor-hover
+          data-cursor-text="open"
+        >
+          GitHub ↗
+        </a>
+
+        
+         <a href={work.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor-hover
+          data-cursor-text="open"
+        >
+          Demo ↗
+        </a>
+      </div>
+    </div>
+  );
+}
 function TechStack() {
   const cats = Object.keys(skills) as (keyof typeof skills)[];
   const [active, setActive] = useState<keyof typeof skills>(cats[0]);
@@ -585,19 +607,26 @@ function Contact() {
     <section id="contact" className="relative overflow-hidden bg-white">
       <div className="mx-auto max-w-[1600px] px-6 py-32">
         <p className="font-hand text-3xl">— get in touch</p>
-        <h2 className="section-title text-6xl font-bold leading-[0.9] md:text-[10vw]">
+        <h4 className="section-title text-4xl font-bold leading-[0.9] md:text-[9vw]">
           Let's make <span className="font-hand italic">something</span> weird & useful.
-        </h2>
+        </h4>
         <div className="mt-16 grid gap-16 md:grid-cols-12">
           <div className="pop md:col-span-5 space-y-6">
             <p className="text-lg">Drop a note. Freelance, collabs, or just to say hi — I read everything.</p>
             <div className="space-y-1 font-mono">
-              <p>hello@irfan.dev</p>
+              <a
+                      href="mailto:muhammedirfank369@gmail.com"
+    data-cursor-hover
+    data-cursor-text="mail"
+    className="text-lg underline underline-offset-4"
+  >
+    muhammedirfank32@gmail.com
+  </a>
               <p>+91 · ● ● ● ●</p>
             </div>
             <svg className="h-24 w-40" viewBox="0 0 200 100" fill="none">
               <path d="M10 50 Q60 10 100 50 T190 50" stroke="black" strokeWidth="3" strokeLinecap="round" fill="none"/>
-              <path d="M180 40 L190 50 L180 60" stroke="black" strokeWidth="3" strokeLinecap="round" fill="none"/>
+              <path d="M180 40 L190 50 L180 70" stroke="black" strokeWidth="3" strokeLinecap="round" fill="none"/>
             </svg>
           </div>
           <form

@@ -35,7 +35,7 @@ export function Loader({ onDone }: { onDone: () => void }) {
       className="fixed inset-0 z-[100] flex flex-col justify-between bg-black text-white"
     >
       <div className="flex items-start justify-between p-6 md:p-10">
-       
+        <span className="font-hand text-2xl md:text-3xl">— irfan</span>
         <span className="font-mono text-xs uppercase tracking-widest md:text-sm">
           portfolio · 2026
         </span>

@@ -143,8 +143,27 @@ function ProjectPage() {
             </div>
           </div>
           <div className="p-reveal mt-10 flex gap-4">
-            <a className="sketch-border bg-black px-6 py-3 text-sm uppercase tracking-widest text-white" href="#">Code ↗</a>
-            <a className="sketch-border-alt px-6 py-3 text-sm uppercase tracking-widest" href="#">Live demo ↗</a>
+            
+  
+   <a className="sketch-border bg-black px-6 py-3 text-sm uppercase tracking-widest text-white"
+    href={project.github || "#"}
+    target={project.github ? "_blank" : undefined}
+    rel={project.github ? "noopener noreferrer" : undefined}
+    data-cursor-hover
+    data-cursor-text="open"
+  >
+    Code ↗
+  </a>
+  
+   <a className="sketch-border-alt px-6 py-3 text-sm uppercase tracking-widest"
+    href={project.demo || "#"}
+    target={project.demo ? "_blank" : undefined}
+    rel={project.demo ? "noopener noreferrer" : undefined}
+    data-cursor-hover
+    data-cursor-text="open"
+  >
+    Live demo ↗
+  </a>
           </div>
         </div>
       </section>

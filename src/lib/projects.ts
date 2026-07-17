@@ -7,8 +7,8 @@ export type Project = {
   overview: string;
   features: string[];
   tech: string[];
-  codeUrl?: string;
-  demoUrl?: string;
+    github: string;
+  demo: string;
 };
 
 export const projects: Project[] = [
@@ -30,6 +30,8 @@ export const projects: Project[] = [
       "User authentication and profile management.",
     ],
     tech: ["React.js", "Node.js", "Express", "MongoDB", "Socket.io", "Chart.js", "JWT"],
+    github: "https://github.com/muhammedirfan07/Voltspot_Backend.git",
+    demo: "https://votsport-forontend.vercel.app/",
   },
   {
     slug: "chatdot",
@@ -48,6 +50,8 @@ export const projects: Project[] = [
       "Mobile-responsive design.",
     ],
     tech: ["React", "Node.js", "Socket.io", "Express", "Tailwind CSS", "HTML"],
+    github: "https://github.com/muhammedirfan07/ChatDot",
+    demo: "https://chat-dot-ochre.vercel.app/",
   },
   {
     slug: "taskflow",
@@ -65,6 +69,8 @@ export const projects: Project[] = [
       "Cleanly showcases all tasks and projects with status.",
     ],
     tech: ["React", "Bootstrap", "MongoDB", "Express", "Node.js"],
+    github: "https://github.com/muhammedirfan07/task-flow",
+    demo: "https://github.com/muhammedirfan07/task-flow",
   },
 ];
 
@@ -72,20 +78,20 @@ export const uiWork = [
   {
     title: "Modern Dashboards",
     desc: "A dashboard-style UI inspired by modern admin interfaces. Focused on visual clarity, chart integration and responsive grid layouts.",
-    github: "https://github.com/your-username/modern-dashboards",
-    demo: "https://modern-dashboards-demo.vercel.app",
+    github: "https://github.com/muhammedirfan07/Dashboard",
+    demo: "https://dashboard-blond-two.vercel.app/",
   },
   {
     title: "Coffee Website",
     desc: "A visually rich landing page for a coffee brand. Designed with elegant typography, parallax scrolling and modern aesthetic.",
-    github: "https://github.com/your-username/coffee-website",
-    demo: "https://coffee-website-demo.vercel.app",
+    github: "https://github.com/muhammedirfan07/coffee-website",
+    demo: "https://coffee-website-bay.vercel.app/",
   },
   {
     title: "Spotify Clone",
     desc: "A music streaming UI clone focused on player controls, playlist layout and dark-themed media components.",
-    github: "https://github.com/your-username/spotify-clone",
-    demo: "https://spotify-clone-demo.vercel.app",
+    github: "https://github.com/muhammedirfan07/spotify-clone",
+    demo: "https://muhammedirfan07.github.io/spotify-clone/",
   },
 ];
 

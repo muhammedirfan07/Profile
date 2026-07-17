@@ -1,19 +1,29 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 export function Nav() {
+  const [scrolled ,SetScrolled ]=useState(false)
+  useEffect(()=>{
+    const onScroll =()=>SetScrolled(window.scrollY>10)
+    onScroll()
+    window.addEventListener("scroll",onScroll,{passive:true})
+    return ()=>window.removeEventListener("scroll",onScroll)
+  },[])
   return (
-    <header className="fixed top-0 left-0 right-0  backdrop-blur-xl s z-50 mix-blend-difference">
-      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 text-white">
-        <Link to="/" className="font-hand text-3xl leading-none" data-cursor-ignore>Irfan.</Link>
-        <nav className="hidden gap-8 text-sm uppercase tracking-widest md:flex">
-          <a href="/#about" data-cursor-hover data-cursor-text="About">About</a>
-          <a href="/#work" data-cursor-hover data-cursor-text="work">Work</a>
-          <a href="/#skills" data-cursor-hover data-cursor-text="skills">Skills</a>
-          <a href="/#contact" data-cursor-hover data-cursor-text="contact">Contact</a>
-        </nav>
-        <a href="/#contact" className="text-sm uppercase tracking-widest" data-cursor-hover data-cursor-text="say hi">Say hi ↗</a>
-      </div>
-    </header>
+  <header className={`fixed top-0 left-0 right-0 backdrop-blur-xl bg-white/70  z-50  ${
+        scrolled ? "border-b-2 border-black" : "border-b-2 border-transparent"
+      }` }>
+  <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 text-black">
+    <Link to="/" className="font-hand text-3xl leading-none" data-cursor-hover data-cursor-text="Home">Irfan.</Link>
+    <nav className="hidden gap-8 text-sm uppercase tracking-widest md:flex">
+      <a href="/#about" data-cursor-hover data-cursor-text="About">About</a>
+      <a href="/#work" data-cursor-hover data-cursor-text="work">Work</a>
+      <a href="/#skills" data-cursor-hover data-cursor-text="skills">Skills</a>
+      <a href="/#contact" data-cursor-hover data-cursor-text="contact">Contact</a>
+    </nav>
+    <a href="/#contact" className="text-sm uppercase tracking-widest" data-cursor-hover data-cursor-text="say hi">Say hi ↗</a>
+  </div>
+</header>
   );
 }
 
@@ -41,10 +51,10 @@ export function Footer() {
             <div className="pop">
               <p className="font-hand text-3xl">Socials</p>
               <div className="mt-2 flex flex-col gap-1">
-                <a href="https://github.com/" target="_blank" rel="noreferrer" data-cursor-hover data-cursor-text="open">
+                <a href="https://github.com/muhammedirfan07" target="_blank" rel="noreferrer" data-cursor-hover data-cursor-text="open">
                   / GitHub
                 </a>
-                <a href="https://linkedin.com/" target="_blank" rel="noreferrer" data-cursor-hover data-cursor-text="open">
+                <a href="https://www.linkedin.com/in/muhammed-irfan-k007/" target="_blank" rel="noreferrer" data-cursor-hover data-cursor-text="open">
                   / LinkedIn
                 </a>
                 <a href="/resume.pdf" target="_blank" rel="noreferrer" data-cursor-hover data-cursor-text="open">

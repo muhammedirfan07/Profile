@@ -80,7 +80,7 @@ export function Cursor() {
 
   return (
     <>
-      <div ref={dot} className="pointer-events-none fixed left-0 top-0 z-[9999]">
+      <div ref={dot} className="pointer-events-none fixed left-0 top-0 z-9999">
         <div
           ref={dotInner}
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out h-1.5 w-1.5 bg-black"
@@ -88,7 +88,7 @@ export function Cursor() {
       </div>
       <div
         ref={ring}
-        className="pointer-events-none fixed left-0 top-0 z-[9999] h-8 w-8"
+        className="pointer-events-none fixed left-0 top-0 z-9999 h-8 w-8"
         style={{ transformOrigin: "center" }}
       >
         <div
@@ -100,7 +100,7 @@ export function Cursor() {
       {isHovering && (
         <div
           ref={text}
-          className="pointer-events-none fixed left-0 top-0 z-[10000] h-8 w-8 rounded-full flex items-center justify-center text-black font-bold text-[10px] text-center leading-none transition-all duration-300 ease-out"
+          className="pointer-events-none fixed left-0 top-0 z-10000 h-8 w-8 rounded-full flex items-center justify-center text-black font-bold text-[10px] text-center leading-none transition-all duration-300 ease-out"
           style={{ transformOrigin: "center" }}
         >
           {cursorText}

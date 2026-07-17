@@ -40,7 +40,7 @@ export function Footer() {
             <div className="pop">
               <p className="font-hand text-3xl">Say hello</p>
               <a
-                href="mailto:muhammadirfank645@gmail.com"
+                href="mailto:muhammedirfank32@gmail.com"
                 data-cursor-hover
                 data-cursor-text="email"
                 className="mt-2 inline-block underline decoration-white/40 underline-offset-4 hover:decoration-white"

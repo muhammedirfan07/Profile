@@ -209,7 +209,13 @@ function ProjectPage() {
       </section>
 
       <section className="border-b-2 border-black">
-        <Link to="/projects/$slug" params={{ slug: next.slug }} className="block px-6 py-24 text-center">
+        <Link
+          to="/projects/$slug"
+          params={{ slug: next.slug }}
+          className="block px-6 py-24 text-center"
+          data-cursor-hover
+          data-cursor-text="next project"
+        >
           <p className="font-hand text-3xl">— next project</p>
           <p className="p-next-text mt-2 text-6xl font-bold md:text-9xl">{next.title} →</p>
         </Link>

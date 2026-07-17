@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Cursor } from "@/components/Cursor";
@@ -603,6 +603,34 @@ function Journey() {
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const sendTimeout = useRef<number | null>(null);
+  const resetTimeout = useRef<number | null>(null);
+  const contactEmail = "muhammedirfank369@gmail.com";
+
+  useEffect(() => {
+    return () => {
+      if (sendTimeout.current) window.clearTimeout(sendTimeout.current);
+      if (resetTimeout.current) window.clearTimeout(resetTimeout.current);
+    };
+  }, []);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (sending) return;
+
+    setSending(true);
+    setSent(false);
+
+    sendTimeout.current = window.setTimeout(() => {
+      setSending(false);
+      setSent(true);
+      formRef.current?.reset();
+      resetTimeout.current = window.setTimeout(() => setSent(false), 3000);
+    }, 2000);
+  };
+
   return (
     <section id="contact" className="relative overflow-hidden bg-white">
       <div className="mx-auto max-w-[1600px] px-6 py-32">
@@ -615,13 +643,13 @@ function Contact() {
             <p className="text-lg">Drop a note. Freelance, collabs, or just to say hi — I read everything.</p>
             <div className="space-y-1 font-mono">
               <a
-                      href="mailto:muhammedirfank369@gmail.com"
-    data-cursor-hover
-    data-cursor-text="mail"
-    className="text-lg underline underline-offset-4"
-  >
-    muhammedirfank32@gmail.com
-  </a>
+                href={`mailto:${contactEmail}`}
+                data-cursor-hover
+                data-cursor-text="mail"
+                className="text-lg underline underline-offset-4"
+              >
+                {contactEmail}
+              </a>
               <p>+91 · ● ● ● ●</p>
             </div>
             <svg className="h-24 w-40" viewBox="0 0 200 100" fill="none">
@@ -629,20 +657,22 @@ function Contact() {
               <path d="M180 40 L190 50 L180 70" stroke="black" strokeWidth="3" strokeLinecap="round" fill="none"/>
             </svg>
           </div>
-          <form
-            onSubmit={(e) => { e.preventDefault(); setSent(true); }}
-            className="pop md:col-span-7 space-y-6"
-          >
+          <form ref={formRef} onSubmit={handleSubmit} className="pop md:col-span-7 space-y-6">
             <Field label="Your name" name="name" />
             <Field label="Email" name="email" type="email" />
             <Field label="What's on your mind?" name="msg" textarea />
             <button
               type="submit"
+              disabled={sending}
               data-cursor-hover
               data-cursor-text="send"
-              className="sketch-border bg-black px-8 py-4 text-lg uppercase tracking-widest text-white transition-transform hover:-translate-y-1"
+              className="sketch-border bg-black px-8 py-4 text-lg uppercase tracking-widest text-white transition-transform hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {sent ? "Sent ✔ — I'll reply soon" : "Send it →"}
+              {sending
+                ? "Sending..."
+                : sent
+                ? "Sent ✔ — I'll reply soon"
+                : "Send it →"}
             </button>
           </form>
         </div>

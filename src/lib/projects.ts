@@ -72,18 +72,36 @@ export const uiWork = [
   {
     title: "Modern Dashboards",
     desc: "A dashboard-style UI inspired by modern admin interfaces. Focused on visual clarity, chart integration and responsive grid layouts.",
+    github: "https://github.com/your-username/modern-dashboards",
+    demo: "https://modern-dashboards-demo.vercel.app",
   },
   {
     title: "Coffee Website",
     desc: "A visually rich landing page for a coffee brand. Designed with elegant typography, parallax scrolling and modern aesthetic.",
+    github: "https://github.com/your-username/coffee-website",
+    demo: "https://coffee-website-demo.vercel.app",
+  },
+  {
+    title: "Spotify Clone",
+    desc: "A music streaming UI clone focused on player controls, playlist layout and dark-themed media components.",
+    github: "https://github.com/your-username/spotify-clone",
+    demo: "https://spotify-clone-demo.vercel.app",
   },
 ];
 
 export const skills = {
-  Frontend: ["React", "Next.js", "Tailwind CSS", "Bootstrap", "TypeScript"],
-  Backend: ["Node.js", "Express", "REST APIs", "Socket.io", "JWT"],
-  Database: ["MongoDB", "MySQL", "Firebase"],
-  Tools: ["Git", "GitHub", "Figma", "Postman", "Vercel"],
+  "Frontend & Backend": [
+    "React.js", "Next.js", "JavaScript", "TypeScript",
+    "Tailwind CSS", "Bootstrap", "Node.js", "Express",
+    "REST APIs", "Socket.io", "JWT",
+  ],
+  "Libraries & Tools": [
+    "MongoDB", "MySQL", "Firebase",
+    "Git", "GitHub", "Figma", "Postman",
+  ],
+  "Payment & Deployment": [
+    "Stripe", "Razorpay", "Vercel", "Render", "Netlify", "Docker",
+  ],
 };
 
 export const journey: {

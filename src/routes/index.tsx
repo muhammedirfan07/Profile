@@ -252,11 +252,42 @@ function ResumeIcon() {
 export { Hero };
 
 function Marquee() {
+  const trackRef = useRef<HTMLDivElement>(null);
   const items = ["React", "Node.js", "MongoDB", "Socket.io", "TypeScript", "Next.js", "Tailwind", "Express", "MySQL", "Figma"];
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !trackRef.current) return;
+
+    const tween = gsap.to(trackRef.current, {
+      xPercent: -50,
+      ease: "none",
+      duration: 30,
+      repeat: -1,
+    });
+
+    const st = ScrollTrigger.create({
+      trigger: trackRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      onUpdate: (self) => {
+        // self.direction: 1 = scrolling down, -1 = scrolling up
+        tween.timeScale(self.direction === 1 ? 1 : -1);
+      },
+    });
+
+    return () => {
+      tween.kill();
+      st.kill();
+    };
+  }, []);
+
   return (
     <section className="border-y-2 border-black bg-black text-white">
       <div className="overflow-hidden py-6">
-        <div className="marquee-track flex w-max gap-12 whitespace-nowrap text-4xl md:text-6xl font-bold">
+        <div
+          ref={trackRef}
+          className="marquee-track flex w-max gap-12 whitespace-nowrap text-4xl md:text-6xl font-bold"
+        >
           {[...items, ...items, ...items, ...items].map((t, i) => (
             <span key={i} className="flex items-center gap-12">
               {t}
@@ -278,15 +309,24 @@ function About() {
           <h2 className="section-title mt-4 text-5xl font-bold leading-none md:text-7xl">Builder of the internet's small, useful things.</h2>
         </div>
         <div className="pop md:col-span-7 md:col-start-6 space-y-6 text-lg leading-relaxed">
-          <p>
-            I design and ship full-stack applications end to end — from schema and sockets to the last button hover. My favourite work sits at the intersection of real-time systems and interfaces that feel personal, not templated.
-          </p>
-          <p>
-            Recently I've been building an EV charging booking platform, a real-time chat app and a team task manager. Each one taught me something new about latency, trust and design under constraints.
-          </p>
+          <div className="space-y-8">
+            <div className=" p-6 md:p-8" style={{ borderRadius: "255px 15px 225px 15px/15px 225px 15px 255px" }}>
+              <h3 className="leading-relaxed text-2xl mb-3">→My Story</h3>
+              <p className="leading-relaxed">
+                I'm a passionate MERN Stack Developer with a strong focus on creating intuitive and performant web applications. My journey in web development started during college, where I discovered my love for building digital experiences that solve real-world problems.
+              </p>
+            </div>
+            <div className="p-6 md:p-8" style={{ borderRadius: "15px 225px 15px 255px/225px 15px 255px 15px" }}>
+              <h3 className="leading-relaxed text-2xl mb-3"> →My Philosophy </h3>
+              <p className="leading-relaxed">
+                I design and ship full-stack applications end to end — from schema and sockets to the last button hover. My favourite work sits at the intersection of real-time systems and interfaces that feel personal, not templated.
+              </p>
+            </div>
+            
+          </div>
           <div className="flex flex-wrap gap-4 pt-2">
             <span className="sketch-border px-4 py-2 text-sm uppercase tracking-widest">Available for freelance</span>
-            <span className="sketch-border-alt px-4 py-2 text-sm uppercase tracking-widest">2+ yrs shipping</span>
+            <span className="sketch-border-alt px-4 py-2 text-sm uppercase tracking-widest">1 yrs shipping</span>
           </div>
         </div>
       </div>
@@ -353,25 +393,86 @@ function ProjectCard({ project, index }: { project: typeof projects[number]; ind
 }
 
 function UI() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: "left" | "right") => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>(".ui-card");
+    const amount = card ? card.offsetWidth + 32 : el.clientWidth;
+    const target = el.scrollLeft + (dir === "left" ? -amount : amount);
+
+    gsap.to(el, {
+      scrollLeft: target,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+  };
+
   return (
-    <section className="border-b-2 border-black bg-black text-white">
+    <section className="border-b-2 border-black text-black">
       <div className="mx-auto max-w-[1600px] px-6 py-24">
         <p className="font-hand text-3xl">— designing</p>
         <h2 className="section-title text-6xl font-bold leading-none md:text-8xl">Modern UI's.</h2>
         <p className="mt-6 max-w-xl text-lg">
           I focus on mastering UI layout, component structure, media controls and responsive design principles.
         </p>
-        <div className="mt-16 grid gap-8 md:grid-cols-2">
+
+        <div
+          ref={trackRef}
+          className="mt-6 flex snap-x snap-mandatory gap-8 overflow-x-auto pb-4"
+          style={{ scrollbarWidth: "none" }}
+        >
           {uiWork.map((w) => (
-            <div key={w.title} className="pop border-2 border-white p-8">
+            <div
+              key={w.title}
+              className="ui-card pop w-full flex-shrink-0 snap-start border-2 border-black p-8"
+            >
               <h3 className="font-hand text-5xl">{w.title}</h3>
               <p className="mt-4 text-base leading-relaxed">{w.desc}</p>
               <div className="mt-6 flex gap-4 text-sm uppercase tracking-widest">
-                <span data-cursor-hover data-cursor-text="open">GitHub ↗</span>
-                <span data-cursor-hover data-cursor-text="open">Demo ↗</span>
+                
+                 <a href={w.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor-hover
+                  data-cursor-text="open"
+                >
+                  GitHub ↗
+                </a>
+                
+                 <a href={w.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor-hover
+                  data-cursor-text="open"
+                >
+                  Demo ↗
+                </a>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 flex items-center justify-end gap-4">
+          <button
+            onClick={() => scroll("left")}
+            data-cursor-hover
+            data-cursor-text="prev"
+            aria-label="Scroll left"
+            className="flex h-12 w-12 items-center justify-center border-2 border-black text-2xl transition-colors hover:bg-black hover:text-white"
+          >
+            ←
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            data-cursor-hover
+            data-cursor-text="next"
+            aria-label="Scroll right"
+            className="flex h-12 w-12 items-center justify-center border-2 border-black text-2xl transition-colors hover:bg-black hover:text-white"
+          >
+            →
+          </button>
         </div>
       </div>
     </section>

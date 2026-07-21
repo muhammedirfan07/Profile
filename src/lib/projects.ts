@@ -121,7 +121,15 @@ export const journey: {
   tags: string[];
 }[] = [
   {
-    period: "Aug 2024 — Present",
+    period: "Apr 2025 — Present",
+    title: "Freelance Developer",
+    org: "Freelancer",
+    description:
+      "Building web applications and prototypes for clients, specializing in React, TypeScript, and Node.js. Responsibilities include end-to-end development, deployment, and client communication.",
+    tags: ["React.js", "TypeScript", "Node.js", "Tailwind", "Freelance"],
+  },
+  {
+    period: "Aug 2024 —   march 2025",
     title: "MERN Stack Developer Intern",
     org: "Luminar Technolab",
     description:
